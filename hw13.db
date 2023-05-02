@@ -1,0 +1,9 @@
+import sqlite3
+
+conn = sqlite3.connect('studentquizzes.db')
+print ("Opened Database");
+
+conn.execute('CREATE TABLE students (name TEXT, quiz TEXT, results TEXT)')
+print ("Table Generated");
+
+conn.close()
