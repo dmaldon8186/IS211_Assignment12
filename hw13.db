@@ -1,9 +1,21 @@
-import sqlite3
+CREATE TABLE students (
+  id INTEGER PRIMARY KEY,
+  first_name TEXT,
+  last_name TEXT
+);
 
-conn = sqlite3.connect('studentquizzes.db')
-print ("Opened Database");
+CREATE TABLE quizzes (
+  id INTEGER PRIMARY KEY,
+  subject TEXT,
+  num_questions INTEGER,
+  date_given TEXT
+);
 
-conn.execute('CREATE TABLE students (name TEXT, quiz TEXT, results TEXT)')
-print ("Table Generated");
-
-conn.close()
+CREATE TABLE results (
+  student_id INTEGER,
+  quiz_id INTEGER,
+  score INTEGER,
+  FOREIGN KEY (student_id) REFERENCES students(id),
+  FOREIGN KEY (quiz_id) REFERENCES quizzes(id),
+  PRIMARY KEY (student_id, quiz_id)
+);
