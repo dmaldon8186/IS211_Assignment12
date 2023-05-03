@@ -89,34 +89,29 @@ def student_results(id):
     student = cursor.fetchone()
     if not student:
         return "No Results"
-    cursor.execute("SELECT quiz_id, score FROM results WHERE student_id=?", (id,))
+    cursor.execute("SELECT quizzes.subject, results.quiz_id, results.score FROM results INNER JOIN quizzes ON results.quiz_id = quizzes.quiz_id WHERE results.student_id=?", (id,))
     results = cursor.fetchall()
     return render_template('student_results.html', student=student, results=results)
 
 @app.route('/results/add', methods=['GET', 'POST'])
 def add_result():
-    if request.method == 'GET':
-        students = db.execute('SELECT id, first_name, last_name FROM students').fetchall()
-        quizzes = db.execute('SELECT id, subject FROM quizzes').fetchall()
+    if request.method == 'POST':
+        student_id = request.form['student_id']
+        quiz_id = request.form['quiz_id']
+        grade = request.form['grade']
+        with sqlite3.connect(DATABASE) as conn:
+            cur = conn.cursor()
+            cur.execute("INSERT INTO results (student_id, quiz_id, score) VALUES (?, ?, ?)", (student_id, quiz_id, grade))
+            conn.commit()
+            return redirect('/dashboard')
+    else:
+        with sqlite3.connect(DATABASE) as conn:
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM students")
+            students = cur.fetchall()
+            cur.execute("SELECT * FROM quizzes")
+            quizzes = cur.fetchall()
         return render_template('add_result.html', students=students, quizzes=quizzes)
-    student_id = request.form.get('student_id')
-    quiz_id = request.form.get('quiz_id')
-    score = request.form.get('score')
-    if not student_id or not quiz_id or not score:
-        flash('All fields are required.')
-        return redirect('/results/add')
-    try:
-        score = int(score)
-    except ValueError:
-        flash('Score must be an integer between 0 and 100.')
-        return redirect('/results/add')
-    if score < 0 or score > 100:
-        flash('Score must be an integer between 0 and 100.')
-        return redirect('/results/add')
-    db.execute('INSERT INTO results (student_id, quiz_id, score) VALUES (?, ?, ?)', (student_id, quiz_id, score))
-    db.commit()
-    flash('Quiz result added successfully.')
-    return redirect('/dashboard')
 
 if __name__ == '__main__':
     app.run()
