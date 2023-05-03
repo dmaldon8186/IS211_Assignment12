@@ -1,19 +1,50 @@
 <!DOCTYPE html>
+<html>
 
-Name     Quiz     result
+<head>
+    <title>Class Dashboard</title>
+</head>
 
-{% for row in rows %}
+<body>
+    <h1>Class Dashboard</h1>
 
-{% endfor %}</pre>
+    <h2>Students</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+        </tr>
+        {% for student in students %}
+        <tr>
+            <td><a href="/student/{{ student[0] }}">{{ student[0] }}</a></td>
+            <td>{{ student[1] }}</td>
+            <td>{{ student[2] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 
-<table border= "1">
-    <thead></thead>
-<tbody>
-    <tr>
-        <td>{{row["name"]}}</td>
-        <td>{{row["quiz"]}}</td>
-        <td>{{row["result"]}}</td>
-    </tr>
-</tbody>
-</table>
-<a href="/">Go back to Home Page</a>
+    <h2>Quizzes</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Subject</th>
+            <th>Number of Questions</th>
+            <th>Date Given</th>
+        </tr>
+        {% for quiz in quizzes %}
+        <tr>
+            <td>{{ quiz[0] }}</td>
+            <td>{{ quiz[1] }}</td>
+            <td>{{ quiz[2] }}</td>
+            <td>{{ quiz[3] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <button onclick="location.href='/student/add'">Add Student</button>
+    <button onclick="location.href='/quiz/add'">Add Quiz</button>
+
+</body>
+
+</html>

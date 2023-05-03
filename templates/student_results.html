@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ student[0] }} {{ student[1] }} Results</title>
+  </head>
+  <body>
+    <h1>{{ student[0] }} {{ student[1] }} Results</h1>
+    {% if results %}
+    <table>
+      <thead>
+        <tr>
+          <th>Quiz ID</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for result in results %}
+        <tr>
+          <td>{{ result[0] }}</td>
+          <td>{{ result[1] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>No Results</p>
+    {% endif %}
+  </body>
+</html>
